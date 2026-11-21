@@ -68,6 +68,9 @@
 #armor{position:fixed;right:10px;bottom:42px;display:none;color:#cfd6ff;
   font:bold 15px 'Courier New',monospace;white-space:nowrap;background:rgba(0,0,0,.42);
   padding:4px 9px;border-radius:4px;text-shadow:1px 1px 0 #000}
+/* 7.0 (the iPhone fixes): a window narrower than the hotbar row (a phone held upright) fills its width with the hotbar, so the corner
+   badges move up beside the hearts and hunger row: XP over the hunger end, armour over the hearts end (clear of JUMP and the joystick) */
+@media (max-width:525px){#xp{bottom:106px}#armor{right:auto;left:10px;bottom:106px}}
 #store,#pow{z-index:25;background:rgba(0,0,0,.62)}
 #storewin,#powwin{position:relative;min-width:min(calc(100% - 16px),540px);max-width:min(calc(100% - 16px),580px);
   max-height:calc(100% - 16px);overflow-y:auto}

@@ -69,6 +69,16 @@ Contact sheets are 5×6 tiles, so thirty frames can be judged at once.
   that every panel sits inside the window without overlaps (a toast over every title view and menu; F3 and the player list
   in the HUD pairs), and writes 5x6 sheets (its header has the options).
 
+- **Phones (game 7.0):** `node tools/qa/ui/mobile_qa.mjs --launch --port <p>` boots the game on an emulated iPhone
+  (390x664 upright, 750x342 on its side with notch and home-indicator insets, DPR 3, touch events on) and drives it with
+  real touch events: the boot gate is down, every menu button and hotbar slot is the element under its own centre, taps
+  start a world, select hotbar slot 9, open and close the inventory, pause and resume; a drag turns the camera; the joystick
+  walks; the controls sit inside the safe area; and with JavaScript off (a file preview) the loading box and the
+  `<noscript>` note show instead of buttons. It is Chrome's device emulation, not Safari: iOS memory limits, Lockdown
+  Mode, Safari's own gestures and its file previews can only be judged on a real iPhone.
+- **No GPU (Linux containers):** `chrome.sh` asks for the GPU, which fails without one, and the game then cannot get
+  WebGL. Point `CHROME` at a two-line wrapper that adds `--use-angle=swiftshader --enable-unsafe-swiftshader`.
+
 Release 1.0 cleared the old known misses: `creativity/cz_qa.mjs`'s patch-notes step (it opens the retired, hidden panel
 through `openPatch()` to read `PATCH_LOG`; players cannot reach it) and `release_qa.mjs` read the current
 version and its public label (`RELEASE_LABEL`) instead of expecting v6.2 text, and `malgorath/m4_hr_qa.mjs`'s haze-ratio and

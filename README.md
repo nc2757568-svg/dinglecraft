@@ -30,6 +30,10 @@ You need a desktop browser with WebGL (WebGL2 for the Hyperreal texture pack). N
 bundled into the file. To build the file yourself you need [Node.js](https://nodejs.org) 20 or newer (22 is what we use; see
 `.nvmrc`). Nothing else.
 
+**On a phone or tablet** the game shows touch controls (left stick to move, drag to look, tap to use, press and hold to
+mine). A downloaded copy opened from Files, Downloads or Mail is only a preview, which cannot run the game (the title says
+so): open the game from a web address in the browser instead, and hold the phone on its side for the most room.
+
 ```
 npm run build
 ```

@@ -3,7 +3,14 @@
    frozen core suite keep working, but players never see it. PATCH_LOG still feeds CHANGELOG.md (scripts/changelog.mjs)
    and the release tooling. Data-driven off GAME_VERSION so it can't drift from the shipped build. */
 const PATCH_LOG=[
- {v:GAME_VERSION,label:RELEASE_LABEL,title:'Replays',lines:[
+ {v:GAME_VERSION,label:RELEASE_LABEL,title:'Release 1.0 (iPhone fixes)',lines:[
+    'THE TITLE NO LONGER LIES. Its buttons used to appear long before the game behind them had arrived (the whole thing is one 40 MB page, and a phone on mobile data takes its time), so tapping them did precisely nothing. Now a Loading line holds their place until every button actually works.',
+    'If the game cannot start at all, it says so instead of playing dead: the title shows what went wrong and a Try again button. iPhone and iPad players are told when Lockdown Mode or low memory has refused the game the WebGL it draws with.',
+    'Opened the downloaded file on your phone and got a beautiful, motionless menu? That was a file preview, and previews do not run games. The title now tells you so, and where to open it instead.',
+    'PHONES HELD UPRIGHT: the hotbar shrinks to fit, so all nine slots and every heart are on screen and tappable. The XP and armour badges step up out of its way.',
+    'Phone on its side: the joystick and the buttons keep clear of the notch and the home indicator.',
+  ]},
+ {v:'6.9',label:'Release 1.0',title:'Replays',lines:[
     'REPLAYS: the game keeps your last 30 seconds ready. Press F8 and it saves as an MP4 video, sound, records and paintings included. Turn it on or off in Settings.',
     'SCREENSHOTS: F2 saves a picture (PNG).',
     'First launch says hello: share your best moments on r/DanDingle.',
