@@ -95,6 +95,9 @@ ai_players/a8_mind.js
 ai_players/a9_ui.js
 ai_players/mob_helpers.js
 
+# PART 58: the Oddities Update (original creatures and habitats)
+features/p58_oddities.js
+
 # PART 57: the Malgorath Update
 malgorath/m0_contract.js
 malgorath/m1_layout.js
