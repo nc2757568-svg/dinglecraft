@@ -101,6 +101,8 @@ function genChunk(cx,cz){
       else{const f=bioFlower(ci.b,top,h,wx,wz);if(f)blocks[bidx(lx,h+1,lz)]=f;}
     }else if(top===B.SNOWGRASS||top===B.SAND){const f=bioFlower(ci.b,top,h,wx,wz);if(f)blocks[bidx(lx,h+1,lz)]=f;}
   }
+  /* original oddity micro-habitats, then normal landmarks */
+  stampOddSite(blocks,x0,z0);
   /* alien villages */
   stampVillages(blocks,x0,z0);
   /* theme parks */
