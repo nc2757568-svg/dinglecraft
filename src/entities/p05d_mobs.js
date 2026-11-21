@@ -76,6 +76,7 @@ function makeMobMesh(mt,opts){
   if(mt==='blockling')return mkBlocklingMesh(G,mats);
   if(T&&T.pmob&&PREG.mesh[mt])return mpMobMesh(mt,G,mats,arguments[1]);
   if(mt==='snake')return mkSnakeMesh(G,mats);
+  if(ODD_MOBS.has(mt))return oddMobMesh(mt);
   const reg=o=>{(Array.isArray(o.material)?o.material:[o.material]).forEach(m=>mats.push(m));return o;};
   const legs=[];
   if(mt==='demon'||(T&&T.mg))return mgMobMesh(mt,G,mats,arguments[1]);
@@ -236,6 +237,7 @@ function updateMob(e,dt){
   if(e.mt==='blockling')return blocklingBrain(e,dt,T);
   if(e.mt==='snake')return snakeBrain(e,dt,T);
   if(T.fly)return dragonBrain(e,dt,T);
+  if(ODD_MOBS.has(e.mt))oddMobAction(e,dt,T);
   const pdx=P.x-e.x,pdz=P.z-e.z;
   const pd=Math.hypot(pdx,pdz);
   if(e.mt==='titan')titanExtra(e,dt,pd,pdx,pdz);
