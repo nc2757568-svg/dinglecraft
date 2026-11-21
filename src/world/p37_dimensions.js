@@ -39,11 +39,11 @@ tile('ambro',(c,R)=>{fillN(c,R,'#c9d4e0',.07);px(c,4,4,'#ffd23d');px(c,5,4,'#ffe
 tile('abrick',(c,R)=>{fillN(c,R,'#e8eef4',.05);c.fillStyle='#c2ccd8';c.fillRect(0,5,16,1);c.fillRect(0,11,16,1);c.fillRect(7,0,1,5);c.fillRect(4,5,1,6);c.fillRect(11,11,1,5);});
 tile('portal_a',(c,R)=>{fillN(c,R,'#3d9de8',.3);px(c,5,5,'#aee2ff');px(c,10,8,'#e0f4ff');px(c,3,11,'#7fc8ff');});
 
-MOBT.imp={hp:8,hw:0.3,h:0.9,spd:2.7,dmg:3,hostile:1,xp:4,body:'#7a2020',head:'#933023',legs:'#54140f'};
-MOBT.hellhog={hp:12,hw:0.42,h:0.85,spd:1.7,dmg:0,xp:2,body:'#b8433a',head:'#c85548',legs:'#8f2a22',drop:{id:IT.PORK,count:2}};
-MOBT.cherub={hp:6,hw:0.3,h:0.9,spd:3.1,dmg:2,hostile:1,xp:3,body:'#eef0fa',head:'#ffe9c8',legs:'#d8dce8'};
-MOBT.infernis={hp:180,hw:0.55,h:2.2,spd:3.2,dmg:8,hostile:1,boss:1,xp:60,body:'#8f1a1a',head:'#b3241a',legs:'#54140f'};
-MOBT.valkyra={hp:150,hw:0.5,h:2.0,spd:4.2,dmg:7,hostile:1,boss:1,fly:1,xp:60,body:'#f2f2fa',head:'#ffe9c8',legs:'#d8b23d'};
+MOBT.imp={hp:8,hw:0.3,h:0.9,spd:2.7,dmg:3,hostile:1,xp:4,body:'#7a2020',head:'#933023',legc:'#54140f'};
+MOBT.hellhog={hp:12,hw:0.42,h:0.85,spd:1.7,dmg:0,xp:2,quad:true,body:'#b8433a',head:'#c85548',legc:'#8f2a22',drop:{id:IT.PORK,min:2,max:2}};
+MOBT.cherub={hp:6,hw:0.3,h:0.9,spd:3.1,dmg:2,hostile:1,fly:true,xp:3,body:'#eef0fa',head:'#ffe9c8',legc:'#d8dce8'};
+MOBT.infernis={hp:180,hw:0.55,h:2.2,spd:3.2,dmg:8,hostile:1,boss:1,xp:60,body:'#8f1a1a',head:'#b3241a',legc:'#54140f'};
+MOBT.valkyra={hp:150,hw:0.5,h:2.0,spd:4.2,dmg:7,hostile:1,boss:1,fly:1,xp:60,body:'#f2f2fa',head:'#ffe9c8',legc:'#d8b23d'};
 
 const NCOLM=new Map(),ACOLM=new Map();
 function nCol(x,z){
