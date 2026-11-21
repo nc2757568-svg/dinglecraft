@@ -105,6 +105,10 @@ boot.run(async()=>{
   ok('CSS: on a window narrower than the hotbar row the XP and armour badges sit above the hearts and hunger row, not on the hotbar',
     /@media \(max-width:525px\)\{#xp\{bottom:106px\}#armor\{right:auto;left:10px;bottom:106px\}\}/.test(CSS)&&
     CSS.indexOf('@media (max-width:525px){#xp')>CSS.indexOf('#xp{position:fixed;right:10px;bottom:10px;')&&CSS.indexOf('@media (max-width:525px){#xp')>CSS.indexOf('#armor{position:fixed;right:10px;bottom:42px;'));
+  {const rs=boot.readSrc('core/p07a_render_sound.js'),inp=boot.readSrc('ui/p06b_input.js');
+    ok('audio() resumes a context iOS left "interrupted" (a phone call, Siri), as well as a suspended one',/if\(AC\.state==='suspended'\|\|AC\.state==='interrupted'\)AC\.resume\(\);/.test(rs));
+    ok('a touchend (the gesture iOS accepts for sound) kicks the audio too, beside touchstart and pointerdown',/document\.addEventListener\('touchend',kickAudio,true\);/.test(inp)&&
+      /document\.addEventListener\('touchstart',kickAudio,true\);/.test(inp)&&/document\.addEventListener\('pointerdown',kickAudio,true\);/.test(inp));}
   const tb=boot.readSrc('ui/p07g_title.js'),bl=boot.readSrc('core/p07h_boot_loop.js'),us=boot.readSrc('ui/p06e_ui_scale.js');
   {const a=tb.indexOf('function tmBoot('),b=tb.indexOf('\n}\n',a),f=tb.slice(a,b),g=f.indexOf("classList.remove('tboot')");
     ok('tmBoot drops the gate after its last button handler and before the first view is shown',g>f.lastIndexOf("on('t_pname_ok'")&&g<f.indexOf("\n  tmShow('main');"));}

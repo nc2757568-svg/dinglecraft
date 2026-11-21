@@ -9,6 +9,7 @@ const PATCH_LOG=[
     'Opened the downloaded file on your phone and got a beautiful, motionless menu? That was a file preview, and previews do not run games. The title now tells you so, and where to open it instead.',
     'PHONES HELD UPRIGHT: the hotbar shrinks to fit, so all nine slots and every heart are on screen and tappable. The XP and armour badges step up out of its way.',
     'Phone on its side: the joystick and the buttons keep clear of the notch and the home indicator.',
+    'Took a call mid-game on an iPhone? The sound comes back with your next tap instead of sulking in silence until a reload.',
   ]},
  {v:'6.9',label:'Release 1.0',title:'Replays',lines:[
     'REPLAYS: the game keeps your last 30 seconds ready. Press F8 and it saves as an MP4 video, sound, records and paintings included. Turn it on or off in Settings.',

@@ -36,6 +36,7 @@ function tryLock(){
 function setupInput(){
   document.addEventListener('pointerdown',kickAudio,true);
   document.addEventListener('touchstart',kickAudio,true);
+  document.addEventListener('touchend',kickAudio,true);   /* 7.0: iOS counts touchend, not touchstart, as the gesture that may (re)start sound */
   addEventListener('keydown',e=>{
     if(chatKey(e))return;
     if(crOn&&crKey(e))return;

@@ -26,7 +26,7 @@ function audio(){
       const d=noiseBuf.getChannelData(0);
       for(let i=0;i<d.length;i++)d[i]=Math.random()*2-1;
     }
-    if(AC.state==='suspended')AC.resume();
+    if(AC.state==='suspended'||AC.state==='interrupted')AC.resume();   /* 7.0: iOS parks the context as 'interrupted' after a call or Siri */
     return AC;
   }catch(e){return null;}
 }
