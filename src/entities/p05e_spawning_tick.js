@@ -42,6 +42,7 @@ function mobsTick(dt){
     }
     return;
   }
+  if(oddAmbientSpawn(x,z,h,p))return;
   if(h<14&&(P.mode!=='c'||_an!==P)){
     let y=-1;
     if(!sunUp()){
@@ -97,6 +98,7 @@ function updateEntities(dt){
     else if(e.t==='debris')updateDebris(e,dt);
     else if(e.t==='lavab')updateLavaBomb(e,dt);
     else if(e.t==='fireb')updateFireBomb(e,dt);
+    else if(e.t==='oddproj')oddProjectileTick(e,dt);
     else if(e.t==='cart')updateCart(e,dt);
     else if(e.t==='xp')updateXP(e,dt);
     else if(e.t==='boat')updateBoat(e,dt);
