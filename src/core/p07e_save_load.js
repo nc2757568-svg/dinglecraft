@@ -84,6 +84,7 @@ function snapshot(name){
     wdseen:[...WDSEEN],
     lsseen:[...LSSEEN],
     rseen:[...RSEEN],
+    oddseen:[...ODD_SITE_SEEN],
     demon:{ay:DEMON.ay,cs:DEMON.cutSeen?1:0,dead:DEMON.dead?1:0},
     ...mgSaveFields(),
     gr:{...GR},
@@ -110,6 +111,7 @@ function resetWorld(){
   WDSEEN.clear();WDLAY.clear();WDPEND.length=0;
   LSSEEN.clear();LSPEND.length=0;
   RSEEN.clear();RPEND.length=0;TITQ.length=0;
+  ODD_SITE_SEEN.clear();oddSiteClock=0;
   Object.assign(GR,GR_DEF());
   DEMON.ay=0;DEMON.cutSeen=false;DEMON.dead=false;DEMON.toasted=false;
   mgReset();
@@ -185,6 +187,7 @@ function applySave(d){
   WDSEEN.clear();for(const v of (d.wdseen||[]))WDSEEN.add(v);
   LSSEEN.clear();for(const v of (d.lsseen||[]))LSSEEN.add(v);
   RSEEN.clear();for(const v of (d.rseen||[]))RSEEN.add(v);
+  ODD_SITE_SEEN.clear();for(const v of (d.oddseen||[]))ODD_SITE_SEEN.add(v);
   Object.assign(GR,GR_DEF(),d.gr||{});
   if(typeof grApplyUI==='function')grApplyUI();
   if(d.demon){DEMON.ay=d.demon.ay||0;DEMON.cutSeen=!!d.demon.cs;DEMON.dead=!!d.demon.dead;}
