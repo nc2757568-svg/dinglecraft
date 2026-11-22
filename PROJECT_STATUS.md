@@ -40,7 +40,7 @@ Tests for 1-5: `tests/ui/u_touch.js` (38 checks, quick tier) with `tests/lib/stu
 `tools/qa/ui/mobile_qa.mjs` (33 checks: 33/33 on 7.0, 26/31 on 6.9 as the control); `boot_check.mjs` 15/15; the full
 `npm run gate` was green at the 7.0 commit (3,783 checks).
 
-Implemented in this session, **not yet committed when this file was written** (the commit that adds this file carries them):
+Committed in `33648de` (pushed; `npm test` green on the final tree: 3,797 checks, 0 failed):
 
 7. **Shotgun pellets and rapid fire vs the hurt window** (`hurtMob` in `src/entities/p05d_mobs.js`, `updateBullet` in
    `src/features/p08_torches_weapons_vehicles_music.js`): bullets set `HIT_PIERCE` and land inside the 0.25 s window;
@@ -71,7 +71,7 @@ quartet (test 69, smoke 220, botsmoke 199) and all four `og_trace` sessions stil
 ## Open items, in priority order
 
 1. Confirm or fix the dirt-placing failure in `play_qa.mjs` (aim at a floor cell 2 m ahead, not at the feet), then rerun.
-2. Run `npm test` and `npm run gate` after items 7-10, commit, push, and check CI.
+2. Run the full `npm run gate` (smokes repeated) after items 7-10 and check the fork's CI on `2ee1fcc` or later.
 3. Phone matrix in real WebKit (WebKitGTK MiniBrowser over WebKitWebDriver; Playwright WebKit is not installed here) and Chrome
    emulation: small iPhone, modern iPhone, iPad, portrait and landscape; multi-touch (joystick + look together), orientation
    change, menus scrolling.
