@@ -1,5 +1,7 @@
 /* ----- touch controls ----- */
 const TOUCH={f:0,s:0};
+/* 7.0: a long press with food (to eat) or a bow (to draw) holds the right button; anything else mines or attacks (left) */
+function touchHoldKey(){const st=heldStack(),d=st&&DEFS[st.id];return d&&(d.food||d.bow)?'r':'l';}
 function setupTouch(){
   if(!('ontouchstart' in window))return;
   document.body.classList.add('touch');
@@ -33,21 +35,21 @@ function setupTouch(){
   addEventListener('touchend',endJoy);
   addEventListener('touchcancel',endJoy);
   /* look + tap-place + hold-mine on the canvas area */
-  let lid=null,lx=0,ly=0,lsx=0,lsy=0,lt0=0,lmoved=false,holdTimer=null;
+  let lid=null,lx=0,ly=0,lsx=0,lsy=0,lt0=0,lmoved=false,holdTimer=null,hold=null;
   $('gl').addEventListener('touchstart',e=>{
     if(!playing||paused||modalOpen()||P.dead)return;
     const t=e.changedTouches[0];
     if(lid!==null)return;
     lid=t.identifier;lx=lsx=t.clientX;ly=lsy=t.clientY;lt0=performance.now();lmoved=false;
-    holdTimer=setTimeout(()=>{if(!lmoved&&lid!==null)MB.l=true;},260);
+    hold=null;holdTimer=setTimeout(()=>{if(!lmoved&&lid!==null){hold=touchHoldKey();mbDown(hold);}},260);   /* 7.0: food or a bow: hold = use */
     e.preventDefault();
   },{passive:false});
   const endLook=e=>{
     for(const t of e.changedTouches)if(t.identifier===lid){
       clearTimeout(holdTimer);
       const dur=performance.now()-lt0;
-      if(!lmoved&&dur<260&&!MB.l){MB.r=true;setTimeout(()=>MB.r=false,60);}
-      MB.l=false;lid=null;
+      if(!lmoved&&dur<260&&!hold){mbDown('r');mbUp('r');}   /* 7.0: a tap is one right click, never lost between frames */
+      if(hold)mbUp(hold);hold=null;lid=null;
     }
   };
   addEventListener('touchend',endLook);

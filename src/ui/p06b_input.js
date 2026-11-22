@@ -1,5 +1,11 @@
 /* ----- input ----- */
 let lockWanted=false;
+/* 7.0: a click or a tap shorter than a frame still counts. A press is held until a frame has seen it (mbFrameEnd, called at the
+   end of frame()); a release that arrives first waits for that frame. MB stays the one source of truth for the game code. */
+const MBQ={l:0,r:0};
+function mbDown(k){MB[k]=true;MBQ[k]=1;}
+function mbUp(k){if(MBQ[k]===1)MBQ[k]=2;else{MB[k]=false;MBQ[k]=0;}}
+function mbFrameEnd(){if(MBQ.l===2)MB.l=false;if(MBQ.r===2)MB.r=false;MBQ.l=MBQ.r=0;}
 /* pointer lock with graceful drag-look fallback (sandboxed iframes etc.) */
 let usePLock=true,plockTold=false,plockWorked=false,relockT=null,curHidden=null;
 function plockFail(){
@@ -93,14 +99,14 @@ function setupInput(){
     if(['Space','KeyW','KeyA','KeyS','KeyD','ShiftLeft','ControlLeft'].includes(e.code)||(e.code==='Tab'&&!paused&&!modalOpen()))e.preventDefault();
   });
   addEventListener('keyup',e=>{KEY[e.code]=false;if(e.code==='KeyW')DBLW.on=false;if(e.code==='Tab')tabHeld=false;});
-  addEventListener('blur',()=>{for(const k in KEY)KEY[k]=false;MB.l=MB.r=false;tabHeld=false;});
+  addEventListener('blur',()=>{for(const k in KEY)KEY[k]=false;MB.l=MB.r=false;MBQ.l=MBQ.r=0;tabHeld=false;});
   const gl=$('gl');
   gl.addEventListener('pointerdown',e=>{
     if(!playing||paused||P.dead||modalOpen())return;
     if(e.pointerType==='touch')return;
     if(usePLock&&document.pointerLockElement!==gl){tryLock();return;}
-    if(e.button===0)MB.l=true;
-    if(e.button===2)MB.r=true;
+    if(e.button===0)mbDown('l');
+    if(e.button===2)mbDown('r');
   });
   gl.addEventListener('pointermove',e=>{
     if(e.pointerType==='touch')return;
@@ -112,8 +118,8 @@ function setupInput(){
   });
   addEventListener('pointerup',e=>{
     if(e.pointerType==='touch')return;
-    if(e.button===0)MB.l=false;
-    if(e.button===2)MB.r=false;
+    if(e.button===0)mbUp('l');
+    if(e.button===2)mbUp('r');
   });
   addEventListener('contextmenu',e=>e.preventDefault());
   addEventListener('mousemove',e=>{

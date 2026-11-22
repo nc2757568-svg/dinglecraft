@@ -10,6 +10,10 @@ const PATCH_LOG=[
     'PHONES HELD UPRIGHT: the hotbar shrinks to fit, so all nine slots and every heart are on screen and tappable. The XP and armour badges step up out of its way.',
     'Phone on its side: the joystick and the buttons keep clear of the notch and the home indicator.',
     'Took a call mid-game on an iPhone? The sound comes back with your next tap instead of sulking in silence until a reload.',
+    'SHOTGUNS NOW SHOOT LIKE SHOTGUNS. All eight pellets land, instead of the first one making the target briefly invincible to the other seven. Point blank went from 2.4 damage to 19.2.',
+    'The SMG stopped throwing two bullets in three into the void: rapid fire now deals the damage it was always supposed to. Swords still hit once per swing.',
+    'Switch tools mid-swing and the block notices: start with your fist and pull out a pickaxe, and it finishes at pickaxe speed (and the reverse no longer cheats).',
+    'A click or tap too quick for the frame is no longer lost. Phones can finally eat and draw bows: hold your finger down with food or a bow in hand.',
   ]},
  {v:'6.9',label:'Release 1.0',title:'Replays',lines:[
     'REPLAYS: the game keeps your last 30 seconds ready. Press F8 and it saves as an MP4 video, sound, records and paintings included. Turn it on or off in Settings.',

@@ -183,20 +183,22 @@ function spawnMob(mt,x,y,z){
     a.seatY=1.05;a.eyeH=1.7;
   }
 }
+var HIT_PIERCE=false;   /* 7.0: true while a bullet hits (updateBullet): it lands inside the hurt window */
 function hurtMob(e,dmg,kx,kz){
   if(e.bot){agHurt(e.A,dmg,HIT_BY||'Dan',kx,kz,HIT_HOW||'melee');return;}
   if(MOBT[e.mt].mg){dmg=mgPreHurt(e,dmg,kx,kz);if(dmg<0)return;}
   if(MOBT[e.mt].pmob){dmg=mpPreHurt(e,dmg,kx,kz);if(dmg<0)return;}
   if(e.mt==='alien'&&e.hp>0&&dmg>0)alienAggro(e);
   if((e.mt==='dragon'||e.mt==='dking')&&dmg>0){e.angry=true;e.tame=false;}
-  if(e.dead||e.hurtT>0.25)return;
+  const _hfresh=!(e.hurtT>0.25);   /* 7.0: every shotgun pellet and every SMG round counts; melee keeps the 0.25 s window */
+  if(e.dead||(!_hfresh&&!(HIT_PIERCE&&e.hp>0)))return;
   if(GR.instaKill&&dmg>0)dmg=(e.hp||1)+99999; /* debug: one hit, any weapon, one kill */
   e.hp-=dmg;e.hurtT=0.5;
   if(e.pfloor!=null&&e.hp<e.pfloor)e.hp=e.pfloor;
   for(const m of e.mats)m.emissive&&m.emissive.setRGB(0.45,0,0);
   const l=Math.hypot(kx,kz)||1;
-  {const _kr=MOBT[e.mt].kbRes?1-MOBT[e.mt].kbRes:1;e.vx+=kx/l*6*_kr;e.vz+=kz/l*6*_kr;e.vy=Math.max(e.vy,5*_kr);}
-  playS('hit');
+  if(_hfresh){const _kr=MOBT[e.mt].kbRes?1-MOBT[e.mt].kbRes:1;e.vx+=kx/l*6*_kr;e.vz+=kz/l*6*_kr;e.vy=Math.max(e.vy,5*_kr);}   /* one knockback per window */
+  if(_hfresh)playS('hit');
   if(!MOBT[e.mt].hostile){e.mode='flee';e.tT=4;e.dir=Math.atan2(e.x-P.x,e.z-P.z);}
   else e.mode='chase';
   if(e.hp<=0)killMob(e);
