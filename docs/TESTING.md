@@ -120,6 +120,13 @@ group (`node scripts/gate.mjs --once --group <g>`, which builds with `--strict` 
 (`node tools/scan_secrets.mjs`). The Release 1.0 scans above run in the `repo` job, and `u_scale.js`, `u_title.js` and `u_touch.js` in
 the `core` job. CI does not run the history scan: contributors' commits keep their own identities and zones.
 
+**Pull requests on a fork:** for a `pull_request` run, Actions checks out GitHub's own merge commit (`refs/pull/<n>/merge`), and
+GitHub authors that commit with the account's primary email. With a personal address there, `r_privacy.js` fails the `repo` job
+("every commit author and committer uses a placeholder or noreply address") while the same commit's `push` run passes. That
+failure is real: a merge commit made on github.com would carry the same address into the history. Turn on **Keep my email
+addresses private** (GitHub, Settings, Emails). The merge commit is only rebuilt when the pull request's head or base moves, so
+re-running the old job is not enough: the next push to the branch gets a fresh merge commit with the noreply address.
+
 ### Optional steps
 
 The gate runs these only when their inputs exist: the brain self-test (when `brain/node_modules` is installed), the
