@@ -98,7 +98,7 @@ await C.ev(`__pq.pad(300,300);__pq.purge();const P=__vox.P;P.inv=P.inv.map(()=>n
   const c1=await C.ev(`return __pq.cnt(__vox.B.COBBLE)`);check(`holding the left button with an iron pickaxe mines stone (${n} frames) and the cobble is picked up`,n<60&&c1===c0+1,{n,c0,c1});
   const dur=await C.ev(`return __vox.P.inv[0]&&__vox.P.inv[0].dur`);check('the pickaxe lost durability for the block',dur<251,{dur});}
 /* placing */
-await C.ev(`const P=__vox.P;P.inv[1]={id:__vox.B.DIRT,count:5};P.sel=1;P.pitch=-1.0;P.yaw=0;`);await stp(3);
+await C.ev(`__pq.pad(300,300);const P=__vox.P;P.inv[1]={id:__vox.B.DIRT,count:5};P.sel=1;P.pitch=-1.0;P.yaw=0;`);await stp(3);   /* back on the pad centre: the floor cell 1.5 m ahead, not the one under the player's feet */
 {await mouse('mousePressed',640,360,'right');await stp(2);await mouse('mouseReleased',640,360,'right');await stp(3);
   const r=await C.ev(`let f=null;for(let z=296;z<=300;z++)if(__vox.getBlock(300,62,z)===__vox.B.DIRT)f=z;return {f,n:__pq.cnt(__vox.B.DIRT)}`);
   check('a right click places the held dirt on the floor in front',r.f!==null&&r.n===4,r);}
