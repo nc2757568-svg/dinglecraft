@@ -22,8 +22,13 @@ export async function connect(port){const list=await (await fetch(`http://127.0.
     if(r.result&&r.result.exceptionDetails){const d=r.result.exceptionDetails;throw new Error(((d.exception&&d.exception.description)||d.text).slice(0,1200));}
     return r.result&&r.result.result?r.result.result.value:undefined;};
   const sleep=ms=>new Promise(r=>setTimeout(r,ms));
-  const open=async(url)=>{await send('Runtime.enable');await send('Page.enable');await send('Network.enable');await send('Network.setCacheDisabled',{cacheDisabled:true});
-    await send('Emulation.setDeviceMetricsOverride',{width:1280,height:720,deviceScaleFactor:1,mobile:false});
+  /* open(url[, dev]): dev (optional, the mobile rig) = {w,h,dpr,mobile,touch,ua,insets:{top,right,bottom,left}}: a phone or tablet
+     (touch events on, so the game's 'ontouchstart' check sees a touch screen) instead of the 1280x720 desktop window */
+  const open=async(url,dev)=>{await send('Runtime.enable');await send('Page.enable');await send('Network.enable');await send('Network.setCacheDisabled',{cacheDisabled:true});
+    await send('Emulation.setDeviceMetricsOverride',dev?{width:dev.w,height:dev.h,deviceScaleFactor:dev.dpr||1,mobile:!!dev.mobile}:{width:1280,height:720,deviceScaleFactor:1,mobile:false});
+    if(dev){await send('Emulation.setTouchEmulationEnabled',{enabled:!!dev.touch,maxTouchPoints:dev.touch?5:1});
+      if(dev.ua)await send('Emulation.setUserAgentOverride',{userAgent:dev.ua});
+      if(dev.insets)await send('Emulation.setSafeAreaInsetsOverride',{insets:dev.insets});}
     await send('Page.addScriptToEvaluateOnNewDocument',{source:"try{const k='vx_vox_settings';let s={};try{s=JSON.parse(localStorage.getItem(k)||'{}')||{};}catch(e){}"+
       "s.snd=0;s.mus=0;s.tp='og';if(!s.pn)s.pn='QA';localStorage.setItem(k,JSON.stringify(s));}catch(e){}"+
       "window.__DINGLE_BRAIN={url:'http://127.0.0.1:9',token:null};window.requestAnimationFrame=function(){return 0;};"});

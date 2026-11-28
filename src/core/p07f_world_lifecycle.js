@@ -41,7 +41,10 @@ function enterGame(){
 async function quitToTitle(){
   endDisaster(true);
   if(P&&P.dead)respawn();
-  await saveToStorage(WORLD.name,true);
+  const saved=await saveToStorage(WORLD.name,true);
+  /* 7.0: a failed save asks before the session is thrown away (Cancel keeps playing; Export World is in the pause menu) */
+  if(!saved&&storageOK()&&typeof confirm==='function'&&
+     !confirm('This world could not be saved, so quitting now loses everything since the last save. Quit anyway?\n(Cancel, then use Export World in the pause menu to keep it.)'))return false;
   playing=false;paused=false;
   closeModal(true);
   document.exitPointerLock&&document.exitPointerLock();

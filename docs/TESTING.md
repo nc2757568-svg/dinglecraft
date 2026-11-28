@@ -1,7 +1,7 @@
 # Testing
 
-DINGLECRAFT has 3,658 distinct automated checks in its game suites (Release 1.0, game 6.9; 3,656 at game 6.8, 3,667 at
-game 6.7, 3,512 at game 6.4, 3,291 at v6.3), plus 276 in the brain and tools self-tests, and no test framework. Every suite is a plain Node script that
+DINGLECRAFT has 3,693 distinct automated checks in its game suites (Release 1.0, game 7.0; 3,658 at game 6.9, 3,656 at
+game 6.8, 3,667 at game 6.7, 3,512 at game 6.4, 3,291 at v6.3), plus 276 in the brain and tools self-tests, and no test framework. Every suite is a plain Node script that
 boots the real built `game.js` against headless stubs (a fake DOM, canvas, WebGL, audio and storage), plays it, and
 prints `N passed, M failed`. Nothing touches the network and nothing makes a sound.
 
@@ -52,7 +52,7 @@ Outputs (boss logs, speed-run records) go to `out/` (or `$DC_OUT_DIR`). Nothing 
 | group | suites | what they cover |
 |---|---|---|
 | repo | `tests/repo/r_build.js`, `r_gate.js`, and the Release 1.0 scans `r_ipscan.js`, `r_ipassets.js`, `r_other_ip.js`, `r_privacy.js` (below); steps: `changelog --check`, `tools/scan_selftest.mjs`, `tools/art/fal_selftest.mjs` (key variables unset, network blocked), `tools/scan_secrets.mjs`, and the brain self-test when `brain/node_modules` exists | the build contract, parity, order files, markers, version sites, guards, asset hashes, hygiene; every suite listed in `gate.json`; no banned name, removed image, other-IP leftover or personal data anywhere; the changelog is current; the scanners work and the would-be-committed files have no secrets or personal paths. Every suite and step except the brain self-test is also in the quick tier |
-| core | `tests/core/test.js`, `smoke.js`, `botsmoke.js`; `tests/ui/u_scale.js`, `tests/ui/u_title.js` | the original game's logic (ids, tables), a full-simulation smoke of a real world, and the AI players (seeded, fake clock); the UI scale and the title menu (Release 1.0) |
+| core | `tests/core/test.js`, `smoke.js`, `botsmoke.js`; `tests/ui/u_scale.js`, `tests/ui/u_title.js`, `tests/ui/u_touch.js` | the original game's logic (ids, tables), a full-simulation smoke of a real world, and the AI players (seeded, fake clock); the UI scale and the title menu (Release 1.0); the iPhone fixes (game 7.0: the title's boot gate and watchdog, the HUD on a phone held upright, the touch controls in the safe area) |
 | texpacks | `t0_static`, `t0_smoke`, `tA_*`, `tB_*`, `tC_*`, and `t?_real` (against the bundled three.js r128) | the texture-pack contract, world and assets, light and post, the cast |
 | purgatory | `p_static`, `p2_static`, `p0`-`p4_smoke`, `p4_boss`, `p5_bots`, `p7_hr`, `p8_saves`, `p8_recast` | Puppet Purgatory, its headliners, the bots inside, its Hyperreal cast; old saves after the Release 1.0 recast, and the recast itself |
 | pilot | `tests/pilot/speedrun.js --fast --to=auto` | an honest test pilot plays purgatory from the door to the EXIT with no free items |
@@ -117,8 +117,15 @@ fires and that none of the Release 1.0 names matches it. Old names that the code
 `.github/workflows/ci.yml` runs on every push and pull request with a read-only token and no secrets: one job per gate
 group (`node scripts/gate.mjs --once --group <g>`, which builds with `--strict` first), the brain's self-test
 (`npm ci --prefix brain` then `node brain/selftest.mjs`, against a fake upstream), and the secrets and privacy scan
-(`node tools/scan_secrets.mjs`). The Release 1.0 scans above run in the `repo` job, and `u_scale.js` and `u_title.js` in the
-`core` job. CI does not run the history scan: contributors' commits keep their own identities and zones.
+(`node tools/scan_secrets.mjs`). The Release 1.0 scans above run in the `repo` job, and `u_scale.js`, `u_title.js` and `u_touch.js` in
+the `core` job. CI does not run the history scan: contributors' commits keep their own identities and zones.
+
+**Pull requests on a fork:** for a `pull_request` run, Actions checks out GitHub's own merge commit (`refs/pull/<n>/merge`), and
+GitHub authors that commit with the account's primary email. With a personal address there, `r_privacy.js` fails the `repo` job
+("every commit author and committer uses a placeholder or noreply address") while the same commit's `push` run passes. That
+failure is real: a merge commit made on github.com would carry the same address into the history. Turn on **Keep my email
+addresses private** (GitHub, Settings, Emails). The merge commit is only rebuilt when the pull request's head or base moves, so
+re-running the old job is not enough: the next push to the branch gets a fresh merge commit with the noreply address.
 
 ### Optional steps
 

@@ -14,6 +14,17 @@ function mkSnakeMesh(G,mats){
   tng.position.set(0,0.2,-0.33);G.add(tng);
   return {G,legs:[],mats};
 }
+/* 7.0: one body segment per apple (at most 14), also used to rebuild a saved, stashed or jarred snake */
+function snakeGrow(e,n){
+  if(!e.trail){e.trail=[[e.x,e.y,e.z]];e.segs=[];e.segMeshes=[];e.wT=0;}
+  for(let i=0;i<n&&e.segMeshes.length<14;i++){
+    const segMat=new THREE.MeshLambertMaterial({color:e.segMeshes.length%2?0x3f9a3f:0x2f8a35});
+    const seg=new THREE.Mesh(new THREE.BoxGeometry(0.38,0.34,0.42),segMat);
+    e.mesh.add(seg);
+    e.segMeshes.push(seg);
+    e.segs.push(1);
+  }
+}
 function snakeBrain(e,dt,T){
   if(!e.trail){e.trail=[[e.x,e.y,e.z]];e.segs=[];e.segMeshes=[];e.wT=0;}
   e.wT-=dt;
@@ -29,11 +40,7 @@ function snakeBrain(e,dt,T){
     if(ad<0.9&&e.segMeshes.length<14){
       apple.st.count--;
       if(apple.st.count<=0)removeEnt(apple);
-      const segMat=new THREE.MeshLambertMaterial({color:e.segMeshes.length%2?0x3f9a3f:0x2f8a35});
-      const seg=new THREE.Mesh(new THREE.BoxGeometry(0.38,0.34,0.42),segMat);
-      e.mesh.add(seg);
-      e.segMeshes.push(seg);
-      e.segs.push(1);
+      snakeGrow(e,1);
       playS('eat');
       burstParticles(e.x,e.y+0.4,e.z,B.LEAF_O,4,0.4);
     }

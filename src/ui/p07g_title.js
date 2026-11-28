@@ -131,6 +131,7 @@ function tmBoot(){
   on('tgr_save',()=>{tgrSave();playS('click');});
   on('t_pname_ok',()=>{const i=$('t_pname');if(pnSet(i&&i.value)){tmShow('main');playS('click');if(typeof rpIntro==='function')rpIntro();}
     else if(i){if(pnClean(i.value))showToast('Pick another name: 2 or more letters, and not an AI player\u2019s name');i.focus();}});
+  {const tg=$('title');if(tg&&tg.classList)tg.classList.remove('tboot');}   /* 7.0: every button answers now: drop the boot gate (#tboot, html/dom/title.html) */
   tmShow('main');
   if(!TM.live)return;
   /* the saved settings arrive asynchronously (loadSettings, p27). The first-launch name prompt and the menu music wait for

@@ -173,6 +173,20 @@ select.mc-in{appearance:auto}
   padding:6px 8px;margin:4px 0;font-size:15px}
 .wrow span{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .wrow .mc-btn.small{padding:7px 12px;font-size:14px}
+/* the boot gate (game 7.0, the iPhone fixes): until the game has wired the menu (tmBoot drops .tboot) a loading line stands where
+   the buttons go, so nothing on the title looks pressable before it can answer; a boot error fills it in (.tbootfail) */
+#tboot{display:none;width:min(440px,100%);flex:none;padding:14px 16px;text-align:center;color:#fff;font-size:17px;line-height:1.4;
+  background:rgba(0,0,0,.5);border:2px solid rgba(255,255,255,.35);text-shadow:1px 1px 0 #000}
+#title.tboot #tboot{display:block}
+#title.tboot #tmain{display:none}
+#tboot p{margin:0}
+#tboot #tboot_hint,#tboot noscript p{font-size:13px;color:#eee}
+#tboot noscript p{margin-top:10px}
+#tboot_hint{max-height:0;overflow:hidden;opacity:0;animation:tbootslow .5s ease 12s forwards}
+@keyframes tbootslow{to{opacity:1;max-height:20em;margin-top:10px}}
+#title.tbootfail #tboot{background:rgba(110,10,0,.72)}
+#title.tbootfail #tboot_hint{opacity:1;max-height:none;margin-top:10px;animation:none}
+#tboot_retry{width:100%;margin:12px 0 0}
 @media (prefers-reduced-motion:reduce){#tlogo{animation:none}.mc-btn{transition:none}}
 @media (max-height:520px){#tstage{gap:8px;padding:8px 10px}#tlogo{width:min(100%,520px)}
   #tmain{gap:6px}#tmain .mc-btn{padding:9px 12px;font-size:16px}#tmain .trow .mc-btn{padding:8px 6px;font-size:14px}}
@@ -236,3 +250,13 @@ body.touch #cross{display:none}
 #btndrop{right:22px;bottom:184px;width:52px;height:52px}
 #btninv{right:88px;bottom:178px;width:52px;height:52px}
 #btnpause{right:14px;top:14px;width:46px;height:46px;border-radius:8px}
+/* 7.0 (the iPhone fixes): with viewport-fit=cover a phone on its side draws the page under the notch and the home indicator; the
+   controls move inside the safe area (env(safe-area-inset-*)), the offsets above stay the minimum, and browsers without env() keep them */
+@supports (left:max(1px,env(safe-area-inset-left))){
+  #joy{left:max(18px,env(safe-area-inset-left));bottom:max(96px,calc(env(safe-area-inset-bottom) + 84px))}
+  #btnjump{right:max(22px,env(safe-area-inset-right));bottom:max(100px,calc(env(safe-area-inset-bottom) + 88px))}
+  #btnsneak{right:max(104px,calc(env(safe-area-inset-right) + 82px));bottom:max(78px,calc(env(safe-area-inset-bottom) + 66px))}
+  #btndrop{right:max(22px,env(safe-area-inset-right));bottom:max(184px,calc(env(safe-area-inset-bottom) + 172px))}
+  #btninv{right:max(88px,calc(env(safe-area-inset-right) + 66px));bottom:max(178px,calc(env(safe-area-inset-bottom) + 166px))}
+  #btnpause{right:max(14px,env(safe-area-inset-right));top:max(14px,env(safe-area-inset-top))}
+}

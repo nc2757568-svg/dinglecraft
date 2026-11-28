@@ -233,6 +233,8 @@ function doMine(dt){
     MINE.active=true;MINE.x=hit.x;MINE.y=hit.y;MINE.z=hit.z;
     MINE.prog=0;MINE.need=breakTime(hit.id,heldStack());
   }
+  {const nd=breakTime(hit.id,heldStack());   /* 7.0: a tool switch mid-swing re-rates the block, keeping the share already mined */
+    if(nd!==MINE.need){if(MINE.need>0&&isFinite(MINE.need)&&isFinite(nd))MINE.prog*=nd/MINE.need;MINE.need=nd;}}
   MINE.prog+=dt;
   if(frameCount%9===0)burstParticles(hit.x+0.5+hit.nx*0.45,hit.y+0.5+hit.ny*0.45,hit.z+0.5+hit.nz*0.45,hit.id,2);
   if(MINE.prog>=MINE.need){

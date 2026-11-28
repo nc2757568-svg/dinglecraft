@@ -39,11 +39,14 @@ function uiPrefNorm(v){
   if(v==='auto'||v===undefined||v===null||v==='')return 'auto';
   const n=+v;return UI_STEPS.includes(n)?n:'auto';
 }
-/* the largest scale (0.05 steps, never below 100%) at which the inventory fits the window, and the HUD row fits beside its badges */
+/* the largest scale (0.05 steps, never below 100%) at which the inventory fits the window, and the HUD row fits beside its badges.
+   7.0 (the iPhone fixes): a window narrower than the bare hotbar row (a phone held upright) takes the HUD below 100%, to the scale
+   at which all nine slots fit (50% at the least); everything at least 526 px wide keeps its old HUD scale. */
 function uiCaps(w,h){
   const m=Math.min((w-16)/UI_BASE.modalW,(h-16)/UI_BASE.modalH);
   const hu=Math.min((w/2-10)/(UI_BASE.hudW/2+UI_BASE.hudSide),h/UI_BASE.hudH);
-  return {modal:Math.max(1,Math.floor(m*20+1e-9)/20),hud:Math.max(1,Math.floor(hu*20+1e-9)/20)};
+  const hf=Math.max(0.5,Math.min(1,Math.floor((w-16)/UI_BASE.hudW*20+1e-9)/20));
+  return {modal:Math.max(1,Math.floor(m*20+1e-9)/20),hud:Math.max(hf,Math.floor(hu*20+1e-9)/20)};
 }
 function uiCompute(pref,w,h,dpr){
   pref=uiPrefNorm(pref);

@@ -213,7 +213,7 @@ function updateBullet(e,dt){
       if(m===P.ride)continue;
       if(nx>m.x-m.hw-0.08&&nx<m.x+m.hw+0.08&&ny>m.y-0.08&&ny<m.y+m.h+0.08&&nz>m.z-m.hw-0.08&&nz<m.z+m.hw+0.08){
         if(m.t==='car'||m.t==='skate'||m.t==='plane')hitCar(m,e.dmg);
-        else{HIT_BY='Dan';HIT_HOW='arrow';hurtMob(m,e.dmg,e.vx,e.vz);HIT_BY=null;HIT_HOW=null;}
+        else{HIT_BY='Dan';HIT_HOW='arrow';HIT_PIERCE=true;try{hurtMob(m,e.dmg,e.vx,e.vz);}finally{HIT_PIERCE=false;}HIT_BY=null;HIT_HOW=null;}
         burstParticles(nx,ny,nz,B.BRICK,4,0.3);
         removeEnt(e);return;
       }

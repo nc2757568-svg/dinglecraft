@@ -11,12 +11,15 @@ function blockComesAlive(x,y,z,id){
   spawnMob('blockling',x+0.5,y,z+0.5);
   const e=entities[entities.length-1];
   e.blockId=id;
-  const cube=e.mesh.getObjectByName&&e.mesh.getObjectByName('blkcube');
-  if(cube&&cube.material&&cube.material.color&&AVGCOL[id]!==undefined&&cube.material.color.setHex)
-    cube.material.color.setHex(AVGCOL[id]);
+  blockTint(e,id);
   playS('squeak');
   showToast('The block does NOT want to be mined today.');
   return true;
+}
+function blockTint(e,id){
+  const cube=e.mesh&&e.mesh.getObjectByName&&e.mesh.getObjectByName('blkcube');
+  if(cube&&cube.material&&cube.material.color&&AVGCOL[id]!==undefined&&cube.material.color.setHex)
+    cube.material.color.setHex(AVGCOL[id]);
 }
 function mkBlocklingMesh(G,mats){
   const bodyMat=new THREE.MeshLambertMaterial({color:0x8a8a8a});

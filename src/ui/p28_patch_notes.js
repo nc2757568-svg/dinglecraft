@@ -3,7 +3,23 @@
    frozen core suite keep working, but players never see it. PATCH_LOG still feeds CHANGELOG.md (scripts/changelog.mjs)
    and the release tooling. Data-driven off GAME_VERSION so it can't drift from the shipped build. */
 const PATCH_LOG=[
- {v:GAME_VERSION,label:RELEASE_LABEL,title:'Replays',lines:[
+ {v:GAME_VERSION,label:RELEASE_LABEL,title:'Release 1.0 (iPhone fixes)',lines:[
+    'THE TITLE NO LONGER LIES. Its buttons used to appear long before the game behind them had arrived (the whole thing is one 40 MB page, and a phone on mobile data takes its time), so tapping them did precisely nothing. Now a Loading line holds their place until every button actually works.',
+    'If the game cannot start at all, it says so instead of playing dead: the title shows what went wrong and a Try again button. iPhone and iPad players are told when Lockdown Mode or low memory has refused the game the WebGL it draws with.',
+    'Opened the downloaded file on your phone and got a beautiful, motionless menu? That was a file preview, and previews do not run games. The title now tells you so, and where to open it instead.',
+    'PHONES HELD UPRIGHT: the hotbar shrinks to fit, so all nine slots and every heart are on screen and tappable. The XP and armour badges step up out of its way.',
+    'Phone on its side: the joystick and the buttons keep clear of the notch and the home indicator.',
+    'Took a call mid-game on an iPhone? The sound comes back with your next tap instead of sulking in silence until a reload.',
+    'SHOTGUNS NOW SHOOT LIKE SHOTGUNS. All eight pellets land, instead of the first one making the target briefly invincible to the other seven. Point blank went from 2.4 damage to 19.2.',
+    'The SMG stopped throwing two bullets in three into the void: rapid fire now deals the damage it was always supposed to. Swords still hit once per swing.',
+    'Switch tools mid-swing and the block notices: start with your fist and pull out a pickaxe, and it finishes at pickaxe speed (and the reverse no longer cheats).',
+    'A click or tap too quick for the frame is no longer lost. Phones can finally eat and draw bows: hold your finger down with food or a bow in hand.',
+    'YOUR WORLDS ARE SAFER. A new world called My World no longer quietly replaces the My World you already had: it becomes My World (2). Imported worlds are saved the moment they arrive, under a name of their own.',
+    'When a save fails (a full browser storage, usually) the game now says so out loud, and Save &amp; Quit asks before throwing the session away. Export World is your friend.',
+    'Things that came back from a reload wrong now come back right: enchanted loot on the floor, Blocklings (they remember what block they were), snakes (they remember every apple), and fortress bosses (no surprise second Infernis).',
+    'Critter Jars keep what they catch: tame dragons stay tame, aliens keep their names and their feelings about you. Bosses no longer fit in a jar, which ends the great Infernis farm.',
+  ]},
+ {v:'6.9',label:'Release 1.0',title:'Replays',lines:[
     'REPLAYS: the game keeps your last 30 seconds ready. Press F8 and it saves as an MP4 video, sound, records and paintings included. Turn it on or off in Settings.',
     'SCREENSHOTS: F2 saves a picture (PNG).',
     'First launch says hello: share your best moments on r/DanDingle.',

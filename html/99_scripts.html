@@ -1,5 +1,27 @@
 <input type="file" id="fileIn" accept=".json,application/json" style="display:none">
 
+<script id="tbootjs">
+/* the boot watchdog (game 7.0, the iPhone fixes). Until the game has wired the title menu (tmBoot drops #title.tboot), the
+   title shows a loading line instead of buttons that cannot answer yet. An error before that (WebGL refused, a browser too old
+   for the game's script) replaces the line with what went wrong and a Try again button. ES5 in one IIFE: it declares nothing in
+   the game's shared global scope, and once the gate is down it never touches the page again. */
+(function(){
+  var shown=false;
+  function fail(msg){
+    var T=document.getElementById('title'),m=document.getElementById('tboot_msg'),h=document.getElementById('tboot_hint'),r=document.getElementById('tboot_retry');
+    if(shown||!T||!m||!/(^|\s)tboot(\s|$)/.test(T.className))return;
+    shown=true;                                   /* the first error is the cause; later ones are its echoes */
+    T.className+=' tbootfail';
+    msg=String(msg||'an unknown error').slice(0,300);
+    var gl=/webgl/i.test(msg);
+    m.textContent=gl?'DINGLECRAFT could not start: this browser would not give it WebGL, which it needs to draw the world.':'DINGLECRAFT could not start: '+msg;
+    if(h)h.textContent=gl?'On iPhone and iPad, Lockdown Mode switches WebGL off, and so can low memory: close other tabs, then try again. ('+msg+')':
+      'Try again. If it keeps happening, the message above says what broke: please pass it on with your browser and device.';
+    if(r)r.hidden=false;
+  }
+  window.addEventListener('error',function(e){fail(e&&(e.message||(e.error&&e.error.message)));});
+})();
+</script>
 <!-- three.js r128 (assets/vendor/three.r128.min.js), bundled under its licence (assets/vendor/three.LICENSE):
 The MIT License
 

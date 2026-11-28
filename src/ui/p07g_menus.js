@@ -10,7 +10,9 @@ function grFromCreate(){
 }
 function wireMenus(){
   $('t_new').onclick=()=>{const bots=!!($('t_bots')&&$('t_bots').checked);
-    startNewWorld($('t_name').value,$('t_seed').value,$('t_mode').value,bots);grFromCreate();};
+    const want=String($('t_name').value||'').trim()||'world',name=uniqueWorldName(want,WORLD_NAMES);   /* 7.0: never over a saved world */
+    startNewWorld(name,$('t_seed').value,$('t_mode').value,bots);grFromCreate();
+    if(name!==want)showToast('"'+want+'" already exists, so this new world is "'+name+'"');};
   $('t_import').onclick=()=>$('fileIn').click();
   $('fileIn').addEventListener('change',e=>{
     if(e.target.files[0])importWorldFile(e.target.files[0]);

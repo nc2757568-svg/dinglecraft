@@ -74,6 +74,7 @@ function frame(t){
     }else renderer.render(scene,camera);
     if(typeof recFrame==='function')recFrame();   /* replays (features/replay.js): grab the frame while the buffer holds it */
     frameCount++;
+    mbFrameEnd();   /* 7.0: releases a click that came and went between two frames (p06b) */
   }
 }
 

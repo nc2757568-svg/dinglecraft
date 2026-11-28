@@ -201,7 +201,7 @@ Grep the names (with `tools/grep-safe.sh`) to find the code.
   win screen `openWin`/`winHome`, compass `cmpFind`, nukes `nukeExplode`, spawn eggs `EGG_BASE`/`EGG_MOBS`, game rules
   `GR`/`GR_DEF`, settings `saveSettings`/`loadSettings`, toasts `showToast`, drops `spawnDrop`, entities `entities`/
   `removeEnt`, the UI scale `UIS`/`uiAutoScale`/`uiApply`/`uiCv` (CSS zoom through `--uiz` and `--uih`, saved as `ui` in
-  `vox_settings`), the title menu `TM`/`tmBoot`/`tmKey` and its background `TBG`/`tbgStart`/`tbgStop`, the HUD layout `hudLayout`/`hlSpot`
+  `vox_settings`), the title menu `TM`/`tmBoot`/`tmKey` (behind the boot gate `#title.tboot` and its watchdog `#tbootjs` in `html/99_scripts.html` until `tmBoot` has wired it) and its background `TBG`/`tbgStart`/`tbgStop`, the HUD layout `hudLayout`/`hlSpot`
   (toasts clear of menus; F3 and the player list clear of the HUD).
 
 ### The frame

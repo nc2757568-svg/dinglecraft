@@ -205,3 +205,22 @@ the engineering underneath is straight-faced. Keep both. `npm run changelog` tur
 | version bumps and releases | `docs/RELEASING.md` |
 | where a pre-repository file went | `docs/LEGACY.md` |
 | what is planned | `docs/ROADMAP.md` |
+
+## 11. Resuming work (sessions on this fork)
+
+Start with [PROJECT_STATUS.md](PROJECT_STATUS.md): branch, pull request, CI state, what is implemented and tested, what is only
+proposed, and the next steps. Keep it current: update it in the same commit as the work it describes.
+
+- **Where to push:** the fork `nc2757568-svg/dinglecraft`, branch `claude/clever-volta-osn95d` (PR #1 into the fork's `main`).
+  Never push to the upstream project, and never run `npm run release` or tag without the owner's go-ahead.
+- **Commit identity:** repo-local `user.name Claude`, `user.email noreply@dinglecraft.invalid`, `commit.gpgsign false` (the
+  history scan refuses signature headers); commit with `TZ=UTC0`. Delete any scratch git refs before testing (`r_privacy.js`
+  reads every local ref).
+- **Tools a session needs:** Node 20+, git, the GitHub connector (pull requests, Actions logs). Browser QA: Chrome or Chromium
+  (here, a SwiftShader wrapper for `CHROME`, see `docs/QA.md`) and, for real WebKit, WebKitGTK's `WebKitWebDriver` with Xvfb.
+  Playwright's own WebKit is not installed and must not be installed over the preinstalled Playwright. No credentials are
+  needed for the game, its tests or its rigs; the brain and the art tools use the owner's own keys (never in the repo, never
+  run them).
+- **Test procedure:** `npm run test:quick` while iterating; `npm test` before a commit; `npm run gate` (background, about 30
+  minutes here) before asking for a release; the rigs `tools/qa/boot_check.mjs`, `tools/qa/ui/mobile_qa.mjs` (phones) and
+  `tools/qa/ui/play_qa.mjs` (the survival loop) for anything a player touches.

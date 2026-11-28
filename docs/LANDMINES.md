@@ -69,6 +69,22 @@ Grep for names with `tools/grep-safe.sh`.
 - **The UI rig checks every pair**: `tools/qa/ui/ui_qa.mjs` shows a toast in every title view and every menu and counts
   F3 and the player list in the HUD overlap pairs. A widget `hudLayout` hides (`visibility:hidden`) is not visible, so it
   is not a pair.
+- **The title's boot gate (game 7.0).** The title is plain HTML and CSS, so the browser paints it long before the 40+ MB
+  script has arrived and run (and a file preview never runs it). `#title` therefore starts as `.tboot`: the main menu is
+  not shown, a loading line (`#tboot`) is. `tmBoot` drops the class after its last button handler: wire any new title
+  control **above** that line, or players get a button that does nothing. `boot()` creates the game renderer before
+  `wireMenus()`, so a WebGL refusal (iOS Lockdown Mode, low memory) leaves the gate up.
+- **The boot watchdog** (`<script id="tbootjs">` in `html/99_scripts.html`, before three.js and the game) shows the first
+  error thrown before the gate drops, with a Try again button (an inline `onclick`, because the game's script may never
+  have run). It shares the game's global scope: keep it one ES5 IIFE, with no top-level `let`/`const`/`var`/`function`
+  (a name there would collide with one of the game's ~3,500 and stop the whole script).
+- **The HUD can go below 100% (game 7.0).** On a window narrower than the bare hotbar row (under 526 px: a phone held
+  upright) `uiCaps` takes the HUD scale down to what fits all nine slots (50% at the least), and `features.css` lifts the
+  XP and armour badges above the hearts and hunger row. Everything 526 px or wider keeps its old HUD scale; overlays never
+  go below 100% (long panels scroll inside).
+- **Touch controls and the safe area.** With `viewport-fit=cover`, a phone on its side draws the page under the notch and
+  the home indicator. The touch controls' offsets live twice in `core.css`: the plain values, and an
+  `@supports (left:max(1px,env(safe-area-inset-left)))` block that keeps them inside the safe area. Change both.
 
 ## Texture packs (PART 54)
 
