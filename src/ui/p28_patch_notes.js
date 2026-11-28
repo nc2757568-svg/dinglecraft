@@ -14,6 +14,10 @@ const PATCH_LOG=[
     'The SMG stopped throwing two bullets in three into the void: rapid fire now deals the damage it was always supposed to. Swords still hit once per swing.',
     'Switch tools mid-swing and the block notices: start with your fist and pull out a pickaxe, and it finishes at pickaxe speed (and the reverse no longer cheats).',
     'A click or tap too quick for the frame is no longer lost. Phones can finally eat and draw bows: hold your finger down with food or a bow in hand.',
+    'YOUR WORLDS ARE SAFER. A new world called My World no longer quietly replaces the My World you already had: it becomes My World (2). Imported worlds are saved the moment they arrive, under a name of their own.',
+    'When a save fails (a full browser storage, usually) the game now says so out loud, and Save &amp; Quit asks before throwing the session away. Export World is your friend.',
+    'Things that came back from a reload wrong now come back right: enchanted loot on the floor, Blocklings (they remember what block they were), snakes (they remember every apple), and fortress bosses (no surprise second Infernis).',
+    'Critter Jars keep what they catch: tame dragons stay tame, aliens keep their names and their feelings about you. Bosses no longer fit in a jar, which ends the great Infernis farm.',
   ]},
  {v:'6.9',label:'Release 1.0',title:'Replays',lines:[
     'REPLAYS: the game keeps your last 30 seconds ready. Press F8 and it saves as an MP4 video, sound, records and paintings included. Turn it on or off in Settings.',

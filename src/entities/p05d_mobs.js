@@ -203,6 +203,13 @@ function hurtMob(e,dmg,kx,kz){
   else e.mode='chase';
   if(e.hp<=0)killMob(e);
 }
+/* 7.0: a mob's own state, kept by saves, the dimension stash and Critter Jars: the fortress or shrine a boss guards, a
+   Blockling's block, a snake's length. Old saves have none of these fields and load as before. */
+function mobKeep(e){const o={};if(e.cellId)o.ci=e.cellId;if(e.blockId)o.bid=e.blockId;
+  if(e.mt==='snake'&&e.segMeshes&&e.segMeshes.length)o.sg=e.segMeshes.length;return o;}
+function mobRestore(m,o){if(!m||!o)return m;if(o.ci)m.cellId=o.ci;
+  if(o.bid&&DEFS[o.bid]){m.blockId=o.bid;if(typeof blockTint==='function')blockTint(m,o.bid);}
+  if(o.sg&&m.mt==='snake'&&typeof snakeGrow==='function')snakeGrow(m,o.sg|0);return m;}
 function killMob(e){
   const T=MOBT[e.mt];
   if(e.blockId)spawnDrop(e.x,e.y+0.4,e.z,{id:e.blockId,count:1},0,2,0);

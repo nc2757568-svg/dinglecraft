@@ -174,6 +174,7 @@ function stashEnts(){
     if(e.t==='mob'){
       const o={t:e.mt,x:e.x,y:e.y,z:e.z,hp:e.hp};
       if(e.cellId)o.ci=e.cellId;
+      Object.assign(o,mobKeep(e));   /* 7.0: a Blockling's block and a snake's length too */
       if(e.mt==='alien'){o.nm=e.name;o.rel=e.rel;o.rom=e.rom;o.md=e.mood==='h'?'h':'c';o.hx=e.hx;o.hz=e.hz;}
       if(MOBT[e.mt].fly){o.tm=e.tame?1:0;o.fed=e.fed||0;o.ang=e.angry?1:0;o.hx=e.hx;o.hy=e.hy;o.hz=e.hz;}
       out.push(o);removeEnt(e);
@@ -196,7 +197,7 @@ function unstashEnts(){
     spawnMob(o.t,o.x,o.y,o.z);
     const e=entities[entities.length-1];
     e.hp=o.hp;
-    if(o.ci)e.cellId=o.ci;
+    mobRestore(e,o);
     if(o.t==='alien'){e.name=o.nm;e.rel=o.rel;e.rom=o.rom;e.mood=o.md==='h'?'h':'c';e.hx=o.hx;e.hz=o.hz;}
     if(MOBT[o.t].fly){e.tame=!!o.tm;e.fed=o.fed||0;e.angry=!!o.ang;e.hx=o.hx;e.hy=o.hy;e.hz=o.hz;}
   }

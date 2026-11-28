@@ -39,6 +39,7 @@ function snapshot(name){
         o.md=e.mood==='h'?'h':'c';o.hx=Math.round(e.hx);o.hz=Math.round(e.hz);}
       if(MOBT[e.mt].fly){o.tm=e.tame?1:0;o.fed=e.fed||0;o.ang=e.angry?1:0;
         o.hx=Math.round(e.hx);o.hy=Math.round(e.hy);o.hz=Math.round(e.hz);}
+      Object.assign(o,mobKeep(e));   /* 7.0: boss fortress, Blockling block, snake length */
       ents.push(o);
     }
     else if(e.t==='subb'){
@@ -203,7 +204,7 @@ function applySave(d){
   }
   while(P.inv.length<36)P.inv.push(null);
   for(const e of (d.ents||[])){
-    if(e.t==='drop')spawnDrop(e.x,e.y,e.z,{id:e.id,count:e.count,dur:e.dur,...(e.mob?{mob:e.mob}:{})},0,0,0);
+    if(e.t==='drop')spawnDrop(e.x,e.y,e.z,{id:e.id,count:e.count,dur:e.dur,...(e.mob?{mob:e.mob}:{}),...(e.ench?{ench:e.ench}:{})},0,0,0);   /* 7.0: enchantments too */
     else if(e.t==='car'){
       spawnCar(e.x,e.y,e.z,e.yaw||0);
       const c=entities[entities.length-1];
@@ -233,6 +234,7 @@ function applySave(d){
       spawnMob(e.t,e.x,e.y,e.z);
       const m=entities[entities.length-1];
       if(e.hp!=null)m.hp=e.hp;
+      mobRestore(m,e);
       if(e.t==='alien'){
         if(e.nm)m.name=e.nm;
         m.rel=e.rel||0;m.rom=e.rom||0;
@@ -247,22 +249,36 @@ function applySave(d){
   }
   agRestore(d);
 }
+/* 7.0: a failed save always says so (an autosave too): a full browser storage must never lose a session in silence */
+const SAVE_FAIL_MSG='Could not save this world (the browser storage may be full). Pause, then Export World to keep it safe.';
 async function saveToStorage(name,quiet){
   if(!playing)return false;
-  const j=JSON.stringify(snapshot(name));
+  let j;try{j=JSON.stringify(snapshot(name));}catch(e){showToast(SAVE_FAIL_MSG);return false;}
   if(j.length>4.5e6&&!quiet)showToast('World save is getting large ('+(j.length/1e6).toFixed(1)+' MB)');
   if(!storageOK()){if(!quiet)showToast('No save storage here — use Export instead');return false;}
   try{
     const r=await window.storage.set('vxw:'+name,j);
-    if(!quiet)showToast(r?'World saved':'Save failed — try Export');
+    if(r){if(WORLD_NAMES&&!WORLD_NAMES.includes(name))WORLD_NAMES.push(name);if(!quiet)showToast('World saved');}
+    else showToast(SAVE_FAIL_MSG);
     return !!r;
-  }catch(e){if(!quiet)showToast('Save failed — try Export');return false;}
+  }catch(e){showToast(SAVE_FAIL_MSG);return false;}
+}
+/* 7.0: names of the saved worlds (refreshed by listWorlds); a new or imported world never takes one of them */
+let WORLD_NAMES=[];
+function uniqueWorldName(name,taken){
+  const base=String(name==null?'':name).trim()||'world';
+  const used=new Set((taken||[]).map(s=>String(s).trim().toLowerCase()));
+  if(!used.has(base.toLowerCase()))return base;
+  let n=2;while(used.has((base+' ('+n+')').toLowerCase()))n++;
+  return base+' ('+n+')';
 }
 async function listWorlds(){
   if(!storageOK())return null;
   try{
     const r=await window.storage.list('vxw:');
-    return r&&r.keys?r.keys.map(k=>k.slice(4)):[];
+    const ws=r&&r.keys?r.keys.map(k=>k.slice(4)):[];
+    WORLD_NAMES=ws.slice();
+    return ws;
   }catch(e){return [];}
 }
 async function loadWorldByName(name){
@@ -286,14 +302,23 @@ function exportWorld(){
 }
 function importWorldFile(file){
   const fr=new FileReader();
-  fr.onload=()=>{
-    try{
-      const d=JSON.parse(fr.result);
-      applySave(d);
-      WORLD.name=d.name||file.name.replace(/\.vxw\.json$|\.json$/,'');
-      if(storageOK())saveToStorage(WORLD.name,true); /* imported worlds are remembered too */
-      enterGame();
-    }catch(e){showToast('Import failed: not a valid world file');}
-  };
+  fr.onload=()=>{importWorldText(fr.result,file.name);};
+  fr.onerror=()=>showToast('Import failed: the file could not be read');
   fr.readAsText(file);
+}
+/* 7.0: an imported world is saved at once (it used to wait for the first autosave), under a name of its own: a file named like
+   a world you already have becomes "Name (2)" instead of replacing it */
+async function importWorldText(text,fileName){
+  let d;
+  try{d=JSON.parse(text);if(!d||typeof d!=='object'||Array.isArray(d)||(d.edits!=null&&typeof d.edits!=='object'))throw 0;}
+  catch(e){showToast('Import failed: not a valid world file');return false;}
+  const want=String(d.name||String(fileName||'world').replace(/\.vxw\.json$|\.json$/,'')).trim()||'world';
+  await listWorlds();
+  const name=uniqueWorldName(want,WORLD_NAMES);
+  try{d.name=name;applySave(d);}catch(e){showToast('Import failed: not a valid world file');return false;}
+  WORLD.name=name;
+  enterGame();
+  const ok=storageOK()?await saveToStorage(name,true):false;
+  if(ok)showToast(name!==want?'Imported as "'+name+'" ("'+want+'" already exists)':'Imported and saved "'+name+'"');
+  return true;
 }

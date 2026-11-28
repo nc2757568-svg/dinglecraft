@@ -40,7 +40,7 @@ function mkBallMesh(){
   return G;
 }
 function throwBall(st){
-  const payload=st.mob?{t:st.mob.t,hp:st.mob.hp}:null;
+  const payload=st.mob?Object.assign({},st.mob):null;   /* 7.0: everything the jar kept */
   st.count--;
   if(st.count<=0)P.inv[P.sel]=null;
   redrawHotbar();
@@ -55,9 +55,28 @@ function throwBall(st){
     st:payload?{id:IT.BALLF,count:1,mob:payload}:{id:IT.BALL,count:1},
     mesh:G});
 }
+/* 7.0: what a jar keeps: type and health, an alien's name and feelings, a dragon's taming and home, a Blockling's block, a
+   snake's length (the same fields a save keeps) */
+function jarPayload(m){
+  const o={t:m.mt,hp:m.hp};
+  if(m.mt==='alien'){o.nm=m.name;o.rel=m.rel;o.rom=m.rom;o.md=m.mood==='h'?'h':'c';}
+  if(MOBT[m.mt].fly){o.tm=m.tame?1:0;o.fed=m.fed||0;o.ang=m.angry?1:0;}
+  return Object.assign(o,mobKeep(m));
+}
+function jarRelease(o,x,y,z){
+  const t=o&&o.t;if(!MOBT[t])return null;
+  spawnMob(t,x,y,z);
+  const m=entities[entities.length-1];
+  const mh=o.hp|0;if(mh>0)m.hp=Math.min(MOBT[t].hp,mh);
+  if(t==='alien'){if(o.nm)m.name=o.nm;if(o.rel!=null)m.rel=o.rel;if(o.rom!=null)m.rom=o.rom;if(o.md)m.mood=o.md==='h'?'h':'c';}
+  if(MOBT[t].fly&&o.tm!=null){m.tame=!!o.tm;m.fed=o.fed||0;m.angry=!!o.ang;}
+  return mobRestore(m,o);
+}
+/* 7.0: bosses (which would respawn at their fortress and could be farmed) and Puppet Purgatory's cast do not fit in a jar */
+function jarRefuses(m){const T=MOBT[m.mt];return !!(m.bot||(T&&(T.boss||T.pmob))||m.cellId);}
 function ballCapture(e,m){
   if(mgBall(e,m))return;
-  e.st={id:IT.BALLF,count:1,mob:{t:m.mt,hp:m.hp}};
+  e.st={id:IT.BALLF,count:1,mob:jarPayload(m)};
   burstParticles(m.x,m.y+m.h*0.5,m.z,B.WOOL,10,0.55);
   playS('pop');
   removeEnt(m);
@@ -73,6 +92,7 @@ function updateBall(e,dt){
       for(const m of entities){
         if(m.t!=='mob'||m.dead||m.bot)continue;
         if(nx>m.x-m.hw-0.3&&nx<m.x+m.hw+0.3&&ny>m.y-0.25&&ny<m.y+m.h+0.3&&nz>m.z-m.hw-0.3&&nz<m.z+m.hw+0.3){
+          if(jarRefuses(m)&&!MOBT[m.mt].mg){if(!e.refused){e.refused=1;showToast('That is far too much creature for one jar.');}continue;}
           ballCapture(e,m);break;
         }
       }
@@ -89,14 +109,8 @@ function updateBall(e,dt){
   if(e.st.mob&&e.thrownFull){
     /* releasing throw: pop open on first ground contact */
     if(e.onGround||e.age>4){
-      const t=e.st.mob.t;
-      if(MOBT[t]){
-        spawnMob(t,e.x,e.y+0.1,e.z);
-        const m=entities[entities.length-1];
-        const mh=e.st.mob.hp|0;
-        if(mh>0)m.hp=Math.min(MOBT[t].hp,mh);
-        m.yaw=P?Math.atan2(P.x-e.x,P.z-e.z):m.yaw;
-      }
+      const m=jarRelease(e.st.mob,e.x,e.y+0.1,e.z);
+      if(m)m.yaw=P?Math.atan2(P.x-e.x,P.z-e.z):m.yaw;
       burstParticles(e.x,e.y+0.4,e.z,B.WOOL,12,0.6);
       playS('pop');
       spawnDrop(e.x,e.y+0.3,e.z,{id:IT.BALL,count:1},0,2,0);
